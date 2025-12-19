@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notes to Flow</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    Note2Flow
+  </header>
+
+  <!-- FLEX CONTAINER -->
+  <div id="app-container">
+
+    <!-- LEFT PANEL -->
+    <div id="notes-panel">
+
+      <!-- Toolbar -->
+      <div id="editor-toolbar">
+        <button data-action="bold">B</button>
+        <button data-action="italic">I</button>
+        <button data-action="h1">H1</button>
+        <button data-action="h2">H2</button>
+        <button data-action="ul">• List</button>
+      </div>
+
+      <!-- Editor -->
+      <div
+        id="editor"
+        contenteditable="true"
+        spellcheck="true"
+      >
+        <p>Start typing your notes here...</p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="flow-panel">
+      <div id="placeholder">
+        Flowchart will appear here as you write
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
