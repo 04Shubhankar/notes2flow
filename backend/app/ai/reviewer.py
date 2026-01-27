@@ -13,6 +13,19 @@ class AIChange(BaseModel):
     type: Literal["importance", "add_node", "remove_node", "rename_node"]
     node_id: Optional[str]
     payload: dict
+    
+def serialize_graph(graph: BuiltGraph) -> dict:
+    return{
+        "nodes":[
+            {
+                "id": node.id,
+                "label": node.label,
+                "importance": node.importance,
+                "parent_id": getattr(node, "parent_id", None),
+            }
+            for node in graph.nodes.values()
+        ]
+    }
 
 def ai_review(graph: BuiltGraph) -> List[AIChange]:
     """
