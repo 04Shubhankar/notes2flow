@@ -1,13 +1,16 @@
 from typing import List, Dict
 from app.models.input import InputNode
-from app.ai.reviewer import AIChange
+from app.models.ai import AIChange
+from app.utils.ids import generate_id
+
 
 class BuiltGraph:
-    def __init__(self, nodes: List[InputNode]):
-        self.nodes: Dict[str, InputNode] = {
-            node.id: node for node in nodes
-        }
-        self.node_count = len(self.nodes)
+    def __init__(self, nodes):
+        self.nodes = {}
+
+        for node in nodes:
+            node_id = generate_id()
+            self.nodes[node_id] = node
 
     def apply_change(self, change: AIChange) -> None:
         if change.type == "importance":
@@ -25,3 +28,38 @@ class BuiltGraph:
     def is_root(self, node_id: str) -> bool:
         node = self.nodes.get(node_id)
         return node and node.parent_id is None
+
+    def _apply_rename_node(self, change: AIChange) -> None:
+        node_id = change.node_id
+        new_text = change.payload.get("to")
+
+        if node_id not in self.nodes:
+            return  # safety guard
+
+        if not isinstance(new_text, str):
+            return
+
+        self.nodes[node_id].text = new_text
+
+    def _apply_importance(self, change: AIChange) -> None:
+        node_id = change.node_id
+        new_val = change.payload.get("to")
+
+        if node_id not in self.nodes:
+            return
+
+        if not isinstance(new_val, int):
+            return
+
+        self.nodes[node_id].importance = new_val
+
+    def _apply_add_node(self, change: AIChange) -> None:
+        # Not implemented yet
+        return
+
+
+    def _apply_remove_node(self, change: AIChange) -> None:
+        # Not implemented yet
+        return
+
+

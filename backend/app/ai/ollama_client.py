@@ -3,7 +3,7 @@
 import ollama
 from typing import Optional
 
-class Ollama_client_error:
+class Ollama_client_error(RuntimeError):
     """Raised When Client Fails"""
     pass
 

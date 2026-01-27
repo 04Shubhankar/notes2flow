@@ -1,22 +1,37 @@
 from typing import Literal, Optional, List
-from pydantic import BaseModel
+from app.models.ai import AIChange
 from app.core.builder import BuiltGraph
 import json
-from app.ai.ollama_client import ask_ollama, OllamaClientError
+from app.ai.ollama_client import ask_ollama, Ollama_client_error
 
 SYSTEM_PROMPT = """
-You are an AI reviewer for a graph.
-You must suggest changes as JSON only.
+You are an AI reviewer for a graph of study notes.
 
-Return a JSON array of objects with this shape:
+You MUST return a JSON array of change objects.
+Return ONLY valid JSON. No explanations. No markdown.
+
+Each change object MUST have this structure:
 {
-  "type": "importance" | "add_node" | "remove_node" | "rename_node",
-  "node_id": string | null,
-  "payload": object
+  "type": "importance" | "rename_node",
+  "node_id": "<existing node id>",
+  "payload": { "to": <new value> }
 }
 
-Return an empty array if no changes are needed.
-Return ONLY valid JSON. No text.
+Rules:
+- You MUST return at least ONE change.
+- Only suggest changes that strictly follow the structure above.
+- For rename_node:
+  payload MUST be exactly { "to": "<new text>" }
+- For importance:
+  payload MUST be exactly { "to": <integer between 1 and 10> }
+- Do NOT include old values.
+- Do NOT include extra keys.
+- Use ONLY node IDs provided in the input.
+- Do NOT invent new nodes.
+
+Task:
+Rename the node whose text is "Calvin Cycle" to "Carbon Fixation".
+
 """
 
 AI_ALLOWED_CHANGES = {
@@ -26,21 +41,16 @@ AI_ALLOWED_CHANGES = {
     "rename_node": "review",
 }
 
-class AIChange(BaseModel):
-    type: Literal["importance", "add_node", "remove_node", "rename_node"]
-    node_id: Optional[str]
-    payload: dict
     
 def serialize_graph(graph: BuiltGraph) -> dict:
-    return{
-        "nodes":[
+    return {
+        "nodes": [
             {
-                "id": node.id,
-                "label": node.label,
+                "id": node_id,
+                "text": node.text,
                 "importance": node.importance,
-                "parent_id": getattr(node, "parent_id", None),
             }
-            for node in graph.nodes.values()
+            for node_id, node in graph.nodes.items()
         ]
     }
 
@@ -52,8 +62,11 @@ def ai_review(graph: BuiltGraph) -> List[AIChange]:
             system_prompt=SYSTEM_PROMPT,
             user_prompt=json.dumps(graph_data),
         )
+        print("\n[AI RAW OUTPUT]")
+        print(raw)
+
         parsed = json.loads(raw)
-    except (OllamaClientError,json.JSONDecodeError):
+    except (Ollama_client_error,json.JSONDecodeError):
         return[]
     
     if not isinstance(parsed,list):
