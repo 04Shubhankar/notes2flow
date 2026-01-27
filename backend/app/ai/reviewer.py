@@ -1,6 +1,23 @@
 from typing import Literal, Optional, List
 from pydantic import BaseModel
 from app.core.builder import BuiltGraph
+import json
+from app.ai.ollama_client import ask_ollama, OllamaClientError
+
+SYSTEM_PROMPT = """
+You are an AI reviewer for a graph.
+You must suggest changes as JSON only.
+
+Return a JSON array of objects with this shape:
+{
+  "type": "importance" | "add_node" | "remove_node" | "rename_node",
+  "node_id": string | null,
+  "payload": object
+}
+
+Return an empty array if no changes are needed.
+Return ONLY valid JSON. No text.
+"""
 
 AI_ALLOWED_CHANGES = {
     "importance": "auto",
@@ -28,12 +45,29 @@ def serialize_graph(graph: BuiltGraph) -> dict:
     }
 
 def ai_review(graph: BuiltGraph) -> List[AIChange]:
-    """
-    AI reviewer stub.
-    Must return structured AIChange objects only.
-    """
-    # later: serialize graph + send to Ollama
-    return []
+    graph_data = serialize_graph(graph)
+
+    try:
+        raw = ask_ollama(
+            system_prompt=SYSTEM_PROMPT,
+            user_prompt=json.dumps(graph_data),
+        )
+        parsed = json.loads(raw)
+    except (OllamaClientError,json.JSONDecodeError):
+        return[]
+    
+    if not isinstance(parsed,list):
+        return[]
+    
+    changes: List[AIChange] = []
+
+    for item in parsed:
+        try:
+            changes.append(AIChange.model_validate(item))
+        except Exception:
+            continue
+            
+    return changes
 
 def refine_graph(graph: BuiltGraph) -> BuiltGraph:
     changes = ai_review(graph)
