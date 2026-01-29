@@ -2,6 +2,29 @@ from typing import List, Dict
 from app.models.input import InputNode
 from app.models.ai import AIChange
 from app.utils.ids import generate_id
+from app.models.graph import Graph, Node, Edge
+
+def build_graph(input_nodes: List[InputNode]) -> Graph:
+    nodes:List[Node]=[]
+    
+    for inp in input_nodes:
+        
+        node = Node(
+            id=generate_id(),
+            label=inp.text,
+            importance=inp.importance,
+            type="concept"
+        )
+        nodes.append(node)
+
+        graph =  Graph(
+            graph_id=generate_id(),
+            nodes=nodes,
+            edges=[],
+            version=1
+        )
+        
+        return graph
 
 
 class BuiltGraph:
