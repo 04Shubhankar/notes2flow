@@ -17,14 +17,14 @@ def build_graph(input_nodes: List[InputNode]) -> Graph:
         )
         nodes.append(node)
 
-        graph =  Graph(
+    graph =  Graph(
             graph_id=generate_id(),
             nodes=nodes,
             edges=[],
             version=1
         )
         
-        return graph
+    return graph
 
 
 class BuiltGraph:

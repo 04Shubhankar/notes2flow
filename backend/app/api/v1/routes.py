@@ -6,12 +6,16 @@ from app.core.builder import build_graph
 router = APIRouter()
 
 @router.post("/graph/parse")
-def parse_graph(request:ParseRequest):
+def parse_graph(request: ParseRequest):
+    print("Received nodes:", len(request.nodes))
+    for n in request.nodes:
+        print("-", n.text)
+
     graph = build_graph(request.nodes)
-    return{
-        "graph":graph,
-        "meta":{
-            "version":graph.version,
-            "node_count":len(graph.nodes)
+    return {
+        "graph": graph,
+        "meta": {
+            "version": graph.version,
+            "node_count": len(graph.nodes)
         }
     }
