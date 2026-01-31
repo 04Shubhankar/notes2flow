@@ -29,10 +29,17 @@ toolbar.addEventListener("click", (e) => {
 
 const editor = document.getElementById("editor");
 
+let latestPayload = null;
+
 editor.addEventListener("input", () => {
   const structure = parseNotes(editor.innerHTML);
-  console.log(structure);
+  latestPayload = buildApiPayload(structure);
+
+  console.log("Prepared payload (not sent):");
+  console.log(JSON.stringify(latestPayload, null, 2));
 });
+
+
 
 
 function parseNotes(html) {
@@ -67,3 +74,64 @@ function parseNotes(html) {
   return nodes;
 }
 
+function buildApiPayload(structure) {
+  const nodes = [];
+
+  function walk(item, importance) {
+    // emit current node
+    nodes.push({
+      text: item.title,
+      importance
+    });
+
+    // walk children if they exist
+    if (item.children && item.children.length > 0) {
+      item.children.forEach(child => {
+        if (typeof child === "string") {
+          nodes.push({
+            text: child,
+            importance: importance + 1
+          });
+        } else {
+          walk(child, importance + 1);
+        }
+      });
+    }
+  }
+
+  structure.forEach(h1 => walk(h1, 2));
+
+  return {
+    nodes,
+    ai_review: false
+  };
+}
+
+
+
+async function callParseApi(payload) {
+  const response = await fetch("http://127.0.0.1:8000/graph/parse", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await response.json();
+  return data;
+}
+
+const generateBtn = document.getElementById("generate-flow");
+
+generateBtn.addEventListener("click", () => {
+  if (!latestPayload) {
+    alert("Nothing to generate yet");
+    return;
+  }
+
+  callParseApi(latestPayload).then(result => {
+    console.log("FINAL API response:");
+    console.log(JSON.stringify(result, null, 2));
+  });
+});
