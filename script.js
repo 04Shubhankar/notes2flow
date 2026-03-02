@@ -1,6 +1,8 @@
 // We will add logic here step by step
 console.log("Notes to Flow loaded");
 const toolbar = document.getElementById("editor-toolbar");
+const flowPanel = document.getElementById("flow-panel");
+
 
 toolbar.addEventListener("click", (e) => {
   const action = e.target.dataset.action;
@@ -131,7 +133,18 @@ generateBtn.addEventListener("click", () => {
   }
 
   callParseApi(latestPayload).then(result => {
-    console.log("FINAL API response:");
-    console.log(JSON.stringify(result, null, 2));
+    renderGraph(result.graph)
   });
 });
+
+function renderGraph(graph){
+  flowPanel.innerHTML="";
+
+  graph.nodes.forEach(node =>{
+    const box = document.createElement("div");
+    box.className = "graph-node";
+
+    box.innerText = node.label;
+    flowPanel.appendChild(box)
+  })
+}

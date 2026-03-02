@@ -29,9 +29,6 @@ Rules:
 - Use ONLY node IDs provided in the input.
 - Do NOT invent new nodes.
 
-Task:
-Rename the node whose text is "Calvin Cycle" to "Carbon Fixation".
-
 """
 
 AI_ALLOWED_CHANGES = {
