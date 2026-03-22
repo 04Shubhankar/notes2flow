@@ -1,14 +1,19 @@
-// We will add logic here step by step
 console.log("Notes to Flow loaded");
-const toolbar = document.getElementById("editor-toolbar");
-const flowPanel = document.getElementById("flow-panel");
 
+const toolbar = document.getElementById("editor-toolbar");
+const editor = document.getElementById("editor");
+const flowPanel = document.getElementById("flow-panel");
+const generateBtn = document.getElementById("generate-flow");
+
+let latestPayload = null;
+
+/* -------------------- TOOLBAR -------------------- */
 
 toolbar.addEventListener("click", (e) => {
   const action = e.target.dataset.action;
   if (!action) return;
 
-  document.getElementById("editor").focus();
+  editor.focus();
 
   switch (action) {
     case "bold":
@@ -29,87 +34,28 @@ toolbar.addEventListener("click", (e) => {
   }
 });
 
-const editor = document.getElementById("editor");
-
-let latestPayload = null;
+/* -------------------- INPUT PARSING -------------------- */
+/* SIMPLE + STABLE: one visible line = one node */
 
 editor.addEventListener("input", () => {
-  const structure = parseNotes(editor.innerHTML);
-  latestPayload = buildApiPayload(structure);
+  const lines = editor.innerText
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
 
-  console.log("Prepared payload (not sent):");
+  latestPayload = {
+    nodes: lines.map(line => ({
+      text: line,
+      importance: 2
+    })),
+    ai_review: false
+  };
+
+  console.log("Prepared payload:");
   console.log(JSON.stringify(latestPayload, null, 2));
 });
 
-
-
-
-function parseNotes(html) {
-  const temp = document.createElement("div");
-  temp.innerHTML = html;
-
-  const nodes = [];
-  let currentH1 = null;
-  let currentH2 = null;
-
-  temp.childNodes.forEach(node => {
-    if (node.nodeName === "H1") {
-      currentH1 = { title: node.innerText, children: [] };
-      nodes.push(currentH1);
-      currentH2 = null;
-    }
-
-    else if (node.nodeName === "H2" && currentH1) {
-      currentH2 = { title: node.innerText, children: [] };
-      currentH1.children.push(currentH2);
-    }
-
-    else if (node.nodeName === "UL") {
-      const items = [...node.querySelectorAll("li")]
-        .map(li => li.innerText);
-
-      if (currentH2) currentH2.children.push(...items);
-      else if (currentH1) currentH1.children.push(...items);
-    }
-  });
-
-  return nodes;
-}
-
-function buildApiPayload(structure) {
-  const nodes = [];
-
-  function walk(item, importance) {
-    // emit current node
-    nodes.push({
-      text: item.title,
-      importance
-    });
-
-    // walk children if they exist
-    if (item.children && item.children.length > 0) {
-      item.children.forEach(child => {
-        if (typeof child === "string") {
-          nodes.push({
-            text: child,
-            importance: importance + 1
-          });
-        } else {
-          walk(child, importance + 1);
-        }
-      });
-    }
-  }
-
-  structure.forEach(h1 => walk(h1, 2));
-
-  return {
-    nodes,
-    ai_review: false
-  };
-}
-
-
+/* -------------------- API CALL -------------------- */
 
 async function callParseApi(payload) {
   const response = await fetch("http://127.0.0.1:8000/graph/parse", {
@@ -120,31 +66,82 @@ async function callParseApi(payload) {
     body: JSON.stringify(payload)
   });
 
-  const data = await response.json();
-  return data;
+  return await response.json();
 }
 
-const generateBtn = document.getElementById("generate-flow");
+/* -------------------- GENERATE FLOW -------------------- */
 
-generateBtn.addEventListener("click", () => {
-  if (!latestPayload) {
+generateBtn.addEventListener("click", async () => {
+  if (!latestPayload || latestPayload.nodes.length === 0) {
     alert("Nothing to generate yet");
     return;
   }
 
-  callParseApi(latestPayload).then(result => {
-    renderGraph(result.graph)
-  });
+  const result = await callParseApi(latestPayload);
+  console.log("Backend graph:", result.graph);
+
+  renderGraph(result.graph);
 });
 
-function renderGraph(graph){
-  flowPanel.innerHTML="";
+/* -------------------- RENDER GRAPH -------------------- */
 
-  graph.nodes.forEach(node =>{
-    const box = document.createElement("div");
-    box.className = "graph-node";
+function renderGraph(graph) {
+  flowPanel.innerHTML = "";
 
-    box.innerText = node.label;
-    flowPanel.appendChild(box)
-  })
+  const cy = cytoscape({
+    container: flowPanel,
+
+    elements: [
+      ...graph.nodes.map(node => ({
+        data: {
+          id: String(node.id),
+          label: node.label
+        }
+      })),
+      ...(graph.edges || []).map(edge => ({
+        data: {
+          id: edge.id,
+          source: String(edge.from_node),
+          target: String(edge.to_node)
+        }
+      }))
+    ],
+
+    style: [
+      {
+        selector: "node",
+        style: {
+          label: "data(label)",
+          "background-color": "#2563eb",
+          color: "#ffffff",
+          "text-valign": "center",
+          "text-halign": "center",
+          "font-size": "14px",
+          width: "label",
+          height: "label",
+          padding: "12px"
+        }
+      },
+      {
+        selector: "edge",
+        style: {
+          width: 2,
+          "line-color": "#888",
+          "target-arrow-color": "#888",
+          "target-arrow-shape": "triangle",
+          "curve-style": "bezier"
+        }
+      }
+    ],
+
+    layout: {
+      name: "breadthfirst",
+      directed: true,
+      padding: 60,
+      spacingFactor: 1.5
+    }
+  });
+
+  cy.fit();
+  cy.center();
 }

@@ -105,3 +105,8 @@
   font-weight: 500;
 }
 
+#flow-panel {
+  width: 100%;
+  height: 600px; /* must have fixed height */
+  background: #f3f4f6;
+}
