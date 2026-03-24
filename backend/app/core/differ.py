@@ -1,8 +1,8 @@
 # Apply AI proposals safely
 
-from app.core.builder import BuiltGraph
+from app.models.graph import Graph
 
-def diff_graphs(old_graph:BuiltGraph, new_graph: BuiltGraph):
+def diff_graphs(old_graph:Graph, new_graph: Graph):
     old_nodes={node.text: node for node in old_graph.nodes}
     new_nodes = {node.text: node for node in new_graph.nodes}
     

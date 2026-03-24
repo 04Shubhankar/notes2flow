@@ -33,7 +33,8 @@ def normalize_input(nodes: List[Dict[str, Any]]) -> Tuple[List[InputNode], List[
         normalized.append(
             InputNode(
                 text=raw.get("text", "").strip(),
-                importance=importance
+                importance=importance,
+                parent_id=raw.get("parent_id")
             )
         )
 

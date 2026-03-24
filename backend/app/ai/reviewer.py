@@ -1,6 +1,7 @@
 from typing import Literal, Optional, List
 from app.models.ai import AIChange
-from app.core.builder import BuiltGraph
+from app.models.graph import Graph, Node, Edge
+from app.utils.ids import generate_id
 import json
 from app.ai.ollama_client import ask_ollama, Ollama_client_error
 
@@ -39,19 +40,19 @@ AI_ALLOWED_CHANGES = {
 }
 
     
-def serialize_graph(graph: BuiltGraph) -> dict:
+def serialize_graph(graph: Graph) -> dict:
     return {
         "nodes": [
             {
-                "id": node_id,
-                "text": node.text,
+                "id": node.id,
+                "text": node.label,
                 "importance": node.importance,
             }
-            for node_id, node in graph.nodes.items()
+            for node in graph.nodes
         ]
     }
 
-def ai_review(graph: BuiltGraph) -> List[AIChange]:
+def ai_review(graph: Graph) -> List[AIChange]:
     graph_data = serialize_graph(graph)
 
     try:
@@ -79,7 +80,7 @@ def ai_review(graph: BuiltGraph) -> List[AIChange]:
             
     return changes
 
-def refine_graph(graph: BuiltGraph) -> BuiltGraph:
+def refine_graph(graph: Graph) -> Graph:
     changes = ai_review(graph)
 
     for change in changes:
@@ -96,7 +97,7 @@ def refine_graph(graph: BuiltGraph) -> BuiltGraph:
 
     return graph
 
-def validate_change(change: AIChange, graph: BuiltGraph) -> bool:
+def validate_change(change: AIChange, graph: Graph) -> bool:
     if change.type == "rename_node":
         to = change.payload.get("to")
         return isinstance(to, str) and len(to) <= 50
