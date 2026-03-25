@@ -80,6 +80,47 @@ def ai_review(graph: Graph) -> List[AIChange]:
             
     return changes
 
+def apply_change(graph: Graph, change: AIChange) -> Graph:
+    nodes = list(graph.nodes)
+    edges = list(graph.edges)
+
+    if change.type == "importance":
+        new_importance = change.payload.get("to")
+        if isinstance(new_importance, int):
+            nodes = [
+                Node(
+                    id=n.id,
+                    label=n.label,
+                    importance=new_importance if n.id == change.node_id else n.importance,
+                    type=n.type
+                )
+                for n in nodes
+            ]
+
+    elif change.type == "rename_node":
+        new_label = change.payload.get("to")
+        if isinstance(new_label, str):
+            nodes = [
+                Node(
+                    id=n.id,
+                    label=new_label if n.id == change.node_id else n.label,
+                    importance=n.importance,
+                    type=n.type
+                )
+                for n in nodes
+            ]
+
+    elif change.type == "remove_node":
+        nodes = [n for n in nodes if n.id != change.node_id]
+        edges = [e for e in edges if e.from_node != change.node_id and e.to_node != change.node_id]
+
+    return Graph(
+        graph_id=graph.graph_id,
+        nodes=nodes,
+        edges=edges,
+        version=graph.version + 1
+    )
+
 def refine_graph(graph: Graph) -> Graph:
     changes = ai_review(graph)
 
@@ -89,11 +130,11 @@ def refine_graph(graph: Graph) -> Graph:
             continue
 
         if rule == "auto":
-            graph.apply_change(change)
+            graph = apply_change(graph, change)
 
         elif rule == "review":
             if validate_change(change, graph):
-                graph.apply_change(change)
+                graph = apply_change(graph, change)
 
     return graph
 
@@ -103,10 +144,13 @@ def validate_change(change: AIChange, graph: Graph) -> bool:
         return isinstance(to, str) and len(to) <= 50
 
     if change.type == "add_node":
-        return graph.node_count < 500
+        return len(graph.nodes) < 500
 
     if change.type == "remove_node":
-        return change.node_id is not None and not graph.is_root(change.node_id)
+        if change.node_id is None:
+            return False
+        target_nodes_with_parents = {e.to_node for e in graph.edges}
+        return change.node_id in target_nodes_with_parents
 
     if change.type == "importance":
         val = change.payload.get("to")

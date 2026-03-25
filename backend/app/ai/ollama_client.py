@@ -17,7 +17,7 @@ def ask_ollama(
         raise ValueError("system_prompt cannot be empty")
 
 
-    if not user_prompt.strip:
+    if not user_prompt.strip():
         raise ValueError("system_prompt cannot be empty")
 
     try:

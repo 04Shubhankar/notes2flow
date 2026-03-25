@@ -38,21 +38,31 @@ toolbar.addEventListener("click", (e) => {
 /* SIMPLE + STABLE: one visible line = one node */
 
 editor.addEventListener("input", () => {
-  const lines = editor.innerText
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(line => line.length > 0);
+  const nodes = [];
+  editor.childNodes.forEach(child => {
+    let text = "";
+    let importance = 2;
 
-  latestPayload = {
-    nodes: lines.map(line => ({
-      text: line,
-      importance: 2
-    })),
-    ai_review: false
-  };
+    if (child.nodeName === "H1") {
+      text = child.innerText.trim();
+      importance = 5;
+    } else if (child.nodeName === "H2") {
+      text = child.innerText.trim();
+      importance = 3;
+    } else if (child.nodeName === "UL" || child.nodeName === "OL") {
+      child.querySelectorAll("li").forEach(li => {
+        const t = li.innerText.trim();
+        if (t.length > 0) nodes.push({ text: t, importance: 2 });
+      });
+      return;
+    } else {
+      text = child.innerText ? child.innerText.trim() : child.textContent.trim();
+    }
 
-  console.log("Prepared payload:");
-  console.log(JSON.stringify(latestPayload, null, 2));
+    if (text.length > 0) nodes.push({ text, importance });
+  });
+
+  latestPayload = { nodes, ai_review: false };
 });
 
 /* -------------------- API CALL -------------------- */
@@ -101,8 +111,8 @@ function renderGraph(graph) {
       ...(graph.edges || []).map(edge => ({
         data: {
           id: edge.id,
-          source: String(edge.from_node),
-          target: String(edge.to_node)
+          source: String(edge.source),
+          target: String(edge.target)
         }
       }))
     ],
