@@ -44,8 +44,8 @@ def validate_semantics(nodes):
             raise ValidationError(
                 f"Node {idx}: text too short to be meaningful"
             )
-"""        
+      
         if node.importance >= 4 and text_length < 10:
             raise ValidationError(
                 f"Node {idx}: high importance with very short text"
-            )"""
+            )
