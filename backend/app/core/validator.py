@@ -37,10 +37,8 @@ def validate_graph(nodes):
 def validate_semantics(nodes):
     for idx,node in enumerate(nodes):
         text_length = len(node.text)
-        print(f"Node {idx}: text='{node.text}' length={len(node.text)} importance={node.importance}")
 
-
-        if text_length<0:
+        if text_length<3:
             raise ValidationError(
                 f"Node {idx}: text too short to be meaningful"
             )
