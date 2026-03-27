@@ -1,13 +1,38 @@
+document.addEventListener("DOMContentLoaded", () => {
 console.log("Notes to Flow loaded");
 
 const toolbar = document.getElementById("editor-toolbar");
 const editor = document.getElementById("editor");
 const flowPanel = document.getElementById("flow-panel");
 const generateBtn = document.getElementById("generate-flow");
-
+const formatGenerateBtn = document.getElementById("format-generate-flow");
 let latestPayload = null;
 
 /* -------------------- TOOLBAR -------------------- */
+formatGenerateBtn.addEventListener("click", async () => {
+  const rawText = editor.innerText.trim();
+  if(!rawText || rawText.length === 0) {
+    alert("Please enter some text to format.");
+    return;
+  }
+
+  const response = await fetch("http://127.0.0.1:8000/graph/format", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ raw_text: rawText })
+  });
+
+  const result = await response.json();
+  if (!response.ok || !result.graph) {
+    alert("Formatting failed: " + (result.detail || "Unknown error"));
+    return;
+  }
+
+  editor.innerHTML = result.html; // Clear current content
+
+  renderGraph(result.graph);
+});
+
 
 toolbar.addEventListener("click", (e) => {
   const action = e.target.dataset.action;
@@ -155,3 +180,5 @@ function renderGraph(graph) {
   cy.fit();
   cy.center();
 }
+
+});
