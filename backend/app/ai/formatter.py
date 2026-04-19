@@ -1,33 +1,18 @@
 import json
 from app.ai.ollama_client import ask_ollama, Ollama_client_error
 
-FORMATTER_SYSTEM_PROMPT = """
-You are a note-structuring assistant.
+FORMATTER_SYSTEM_PROMPT ="""
+Return ONLY a JSON object. No explanation. No markdown. No code fences.
 
-The user will give you a blob of unstructured text.
-Your job is to organize it into a clear hierarchy and return ONLY a JSON object.
-
-Return ONLY valid JSON. No explanations. No markdown. No code fences.
-
-The JSON must have exactly this structure:
+Structure:
 {
-  "nodes": [
-    { "text": "<heading or point>", "importance": <integer 1-5> }
-  ],
-  "html": "<formatted HTML string using only h1, h2, h3, ul, li, p tags>"
+  "nodes": [{"text": "...", "importance": 1-5}],
+  "html": "<h1>...</h1><h2>...</h2><ul><li>...</li></ul>"
 }
 
-Importance scale:
-- 5 = main topic (h1)
-- 3 = subtopic (h2)
-- 2 = supporting point (h3 or bullet)
-- 1 = detail
+Importance: 5=main topic, 3=subtopic, 2=bullet point, 1=detail.
 
-Rules:
-- Every node must have a non-empty text and a valid importance integer
-- The html field must reflect the same hierarchy as the nodes
-- Do NOT include any key other than "nodes" and "html"
-- Do NOT wrap in markdown or code fences
+The Heading of the HTML should be the most important node. Subheadings should be less important. Bullet points should be least important. The HTML structure should reflect the importance hierarchy.
 """
 
 def format_blob(raw_text: str) -> dict:

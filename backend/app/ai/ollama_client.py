@@ -11,7 +11,7 @@ def ask_ollama(
         system_prompt:str,
         user_prompt: str,
         *,
-        model: str='phi3:mini'
+        model: str='gemma2:2b'
 ) -> str:
     if not system_prompt.strip():
         raise ValueError("system_prompt cannot be empty")
