@@ -130,7 +130,8 @@ function renderGraph(graph) {
       ...graph.nodes.map(node => ({
         data: {
           id: String(node.id),
-          label: node.label
+          label: node.label,
+          importance: node.importance
         }
       })),
       ...(graph.edges || []).map(edge => ({
@@ -143,39 +144,70 @@ function renderGraph(graph) {
     ],
 
     style: [
-      {
-        selector: "node",
-        style: {
-          label: "data(label)",
-          "background-color": "#2563eb",
-          color: "#ffffff",
-          "text-valign": "center",
-          "text-halign": "center",
-          "font-size": "14px",
-          width: "label",
-          height: "label",
-          padding: "12px"
-        }
-      },
-      {
-        selector: "edge",
-        style: {
-          width: 2,
-          "line-color": "#888",
-          "target-arrow-color": "#888",
-          "target-arrow-shape": "triangle",
-          "curve-style": "bezier"
-        }
+    {
+      selector: "node",
+      style: {
+        label: "data(label)",
+        "text-valign": "center",
+        "text-halign": "center",
+        "text-wrap": "wrap",
+        "text-max-width": "120px",
+        "font-size": "13px",
+        color: "#ffffff",
+        "background-color": "#2563eb",
+        width: "label",
+        height: "label",
+        padding: "14px",
+        shape: "roundrectangle"
       }
-    ],
+    },
+    {
+      selector: "node[importance = 5]",
+      style: {
+        "background-color": "#1e3a8a",
+        "font-size": "15px",
+        "font-weight": "bold",
+        padding: "18px",
+        "text-max-width": "160px"
+      }
+    },
+    {
+      selector: "node[importance = 3]",
+      style: {
+        "background-color": "#2563eb",
+        "font-size": "13px",
+        padding: "14px",
+        "text-max-width": "130px"
+      }
+    },
+    {
+      selector: "node[importance = 2]",
+      style: {
+        "background-color": "#60a5fa",
+        "font-size": "12px",
+        padding: "10px",
+        "text-max-width": "110px"
+      }
+    },
+    {
+      selector: "edge",
+      style: {
+        width: 1.5,
+        "line-color": "#94a3b8",
+        "target-arrow-color": "#94a3b8",
+        "target-arrow-shape": "triangle",
+        "curve-style": "bezier"
+      }
+    }
+  ],
 
     layout: {
-      name: "breadthfirst",
-      directed: true,
-      padding: 60,
-      spacingFactor: 1.5
-    }
-  });
+    name: "breadthfirst",
+    directed: true,
+    padding: 40,
+    spacingFactor: 1.2
+  }
+});
 
   cy.fit();
   cy.center();

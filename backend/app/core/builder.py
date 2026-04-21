@@ -23,8 +23,7 @@ def build_graph(input_nodes: List[InputNode]) -> Graph:
 
         nodes.append(node)
 
-        # remove nodes that are same importance or less important (lower number)
-        while stack and stack[-1]["importance"] <= inp.importance:
+        while stack and stack[-1]["importance"] >= inp.importance:
             stack.pop()
 
         # connect to nearest valid parent (which is more important)
