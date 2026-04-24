@@ -2,45 +2,53 @@ from bs4 import BeautifulSoup
 from app.ai.ollama_client import ask_ollama, Ollama_client_error
 
 FORMATTER_SYSTEM_PROMPT = FORMATTER_SYSTEM_PROMPT = """
-You are a note structurer. Your only job is to reorganize text into HTML without losing ANY information.
+You are a note formatting engine. Convert raw input text into structured HTML notes.
 
-STRICT RULES:
+OUTPUT RULES:
 - Use ONLY these tags: <h1>, <h2>, <ul>, <li>
-- Use ONE <h1> per major topic, which is the highest level of hierarchy. It should represent a main topic or theme that encompasses multiple related points.
-- <h1> is preffered to be of single word but can be of maximum two words if it helps clarity. It should be a concise label that captures the essence of the topic.
-- Every <h1> must appear before its related <h2> and <ul> tags
-- If you cannot determine a topic name, infer one from the content — never skip the <h1>
-- Multiple <h2> under each <h1> are allowed
-- If multiple points are related to same main topic, group them under the same <h1> and use multiple <h2> for subtopics if needed
-- <ul><li> under each <h2> for every single point, fact, definition, and detail
-- Every <li> must be a complete, self-contained statement — keep enough words so the meaning is fully preserved
-- If a point has an explanation attached, keep BOTH the point and its explanation in the same <li>
-- DO NOT summarize, compress, merge, or drop any content
-- DO NOT strip words or shorten sentences if it changes the meaning
-- DO NOT add any new information or reword anything — copy the core fact as-is, only clean up grammar if necessary
-- Make the points as concise as possible without losing meaning, but do not remove any words if it changes the meaning
-- It must resemble a well-organized set of notes with clear hierarchy and structure, not a long paragraph or essay
-- Reduce redundancy by grouping related points under the same <h1> and using multiple <h2> for subtopics if needed, but do not remove any points or details
-- If a point is repeated multiple times, keep it only once but make sure to include all unique details and explanations attached to it in the same <li>
-- Create easy to remember and grasp , short bullet points that capture the essence of each fact, definition, and detail, but do not remove any words if it changes the meaning for all html tags.
-- You may remove filler words like "also", "additionally", "in order to", "basically", "essentially", "very", "really", "actually", "just", "quite", "somewhat", "a bit", "sort of", "kind of", etc. if it does not change the meaning, but do not remove any words if it changes the meaning
-- Do not use <h3>, <h4>, <b>, <strong>, <p>, <br> tags
 - No attributes on any tag
-- Return ONLY raw HTML. No explanation. No markdown. No code fences.
-- DO NOT paraphrase or reword the meaning of any point — copy the core fact as-is, only clean up grammar if necessary
-- NEVER invert or alter the meaning of a statement. "No failure chance" must stay as "No failure chance", not be moved to a Risks section
-- DO NOT paraphrase, reword, or alter the meaning of any statement — preserve the original wording as closely as possible
-- NEVER move a point to a different section if it changes its meaning. "No failure chance" belongs under Benefits, not Risks
+- No other tags allowed: no <h3>, <b>, <p>, <br>, <strong>
+- Return ONLY raw HTML — no explanation, no markdown, no code fences
 
+STRUCTURE RULES:
+- <h1> = one major theme or domain (1–2 words max). One <h1> per major topic.
+- <h2> = one distinct concept, subtopic, or idea within that theme. Use a NEW <h2> for every semantically distinct idea — even if ideas are related. More <h2>s is always better than fewer.
+- <ul><li> = one fact, detail, or point per <li> under each <h2>
+- Every <h1> must appear before its related <h2> tags
+- Every <h2> must have at least one <ul><li>
 
-EXAMPLE 1:
+H2 TRIGGER RULE — THIS IS CRITICAL:
+Create a new <h2> every time the input shifts to a different aspect, property, cause, effect, type, step, or example — even within the same topic. When in doubt, split into more <h2>s rather than fewer. A flat structure with few <h2>s is always wrong.
+
+CONTENT RULES:
+- Preserve the original meaning of every point exactly — do not paraphrase or invert meaning
+- Each <li> must be a complete, self-contained statement
+- Remove filler words (also, basically, essentially, very, really, just) only if meaning is unchanged
+- Do not add new information
+- Do not merge two distinct points into one <li>
+- If a point includes an explanation, keep both in the same <li>
+
+PRIORITY ORDER (when rules conflict):
+1. Correct tag structure
+2. Meaning preserved
+3. Conciseness
+
+EXAMPLE:
 Input:
-Method A runs before execution. It uses more disk space. It is faster since dependencies are bundled. Method B runs at runtime. It uses less memory as resources are shared. It has higher failure risk. Loaders read binary object code and copy it into memory. They also allocate memory and resolve external references.
+"Photosynthesis is the process by which plants make food using sunlight. It occurs in the chloroplasts. The inputs are sunlight, water, and carbon dioxide. The output is glucose and oxygen. Without sunlight, photosynthesis cannot occur. Plants in dark conditions stop producing food."
 
 Output:
-<h1>Linking Methods</h1><h2>Method A</h2><ul><li>Runs before execution begins</li><li>Uses more disk space due to bundled dependencies</li><li>Faster execution since all dependencies are included</li></ul><h2>Method B</h2><ul><li>Runs at runtime, not before execution</li><li>Uses less memory because resources are shared</li><li>Higher failure risk compared to Method A</li></ul><h1>Loaders</h1><h2>Core Function</h2><ul><li>Reads binary object code and copies it into memory</li><li>Allocates memory for program data</li><li>Resolves external references to other programs or libraries</li></ul>
-
-
+<h1>Photosynthesis</h1>
+<h2>Definition</h2>
+<ul><li>Process by which plants make food using sunlight</li></ul>
+<h2>Location</h2>
+<ul><li>Occurs in the chloroplasts of plant cells</li></ul>
+<h2>Inputs</h2>
+<ul><li>Sunlight, water, and carbon dioxide are required</li></ul>
+<h2>Outputs</h2>
+<ul><li>Produces glucose and oxygen</li></ul>
+<h2>Light Dependency</h2>
+<ul><li>Cannot occur without sunlight — plants in dark conditions stop producing food</li></ul>
 """
 
 IMPORTANCE = {"h1": 1, "h2": 2, "li": 3}
