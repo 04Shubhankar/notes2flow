@@ -55,8 +55,8 @@ def format_graph(request: FormatRequest):
 @router.post("/graph/parse")
 def parse_graph(request: ParseRequest):
     print("Received nodes:", len(request.nodes))
-    for n in request.nodes:
-        print("-", n.text)
+    #for n in request.nodes:
+    #   print("-", n.text )
     try:
         graph, corrections = run_pipeline([n.model_dump() for n in request.nodes])
     except Exception as e:
@@ -64,6 +64,11 @@ def parse_graph(request: ParseRequest):
 
     if request.ai_review:
         graph = refine_graph(graph)
+
+    # Print node IDs for debugging
+    print("Processed -  Node --> IDs:")
+    for node in graph.nodes:
+        print(f"{node.label} --> {node.id}")
 
     return {
     "graph": {

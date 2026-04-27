@@ -11,9 +11,9 @@ You are an AI reviewer for a graph of study notes.
 You MUST return a JSON array of change objects.
 Return ONLY valid JSON. No explanations. No markdown. No code fences.
 
-Each change object MUST have this structure:
+Each change object MUST have one of the following structure:
 {
-  "type": "importance" | "rename_node",
+  "type": "importance" | "rename_node" | "add_node" | "remove_node",
   "node_id": "<existing node id>",
   "payload": { "to": <new value> }
 }
