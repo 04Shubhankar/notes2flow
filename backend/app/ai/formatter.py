@@ -116,9 +116,6 @@ def format_blob(raw_text: str) -> dict:
     except Ollama_client_error as e:
         raise RuntimeError(f"Formatter AI call failed: {e}") from e
 
-    print("\n[FORMATTER RAW OUTPUT]")
-    print(raw)
-
     # Strip markdown fences if model misbehaves
     cleaned = raw.strip()
     if "```" in cleaned:
