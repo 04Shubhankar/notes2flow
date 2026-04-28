@@ -3,7 +3,7 @@ from app.models.ai import AIChange
 from app.models.graph import Graph, Node, Edge
 from app.utils.ids import generate_id
 import json
-from app.ai.ollama_client import ask_ollama, Ollama_client_error
+from app.ai.groq_client import ask_groq, Groq_client_error
 
 SYSTEM_PROMPT = SYSTEM_PROMPT = """
 You are an AI reviewer for a graph of study notes.
@@ -89,7 +89,7 @@ def ai_review(graph: Graph) -> List[AIChange]:
     graph_data = serialize_graph(graph)
 
     try:
-        raw = ask_ollama(
+        raw = ask_groq(
             system_prompt=SYSTEM_PROMPT,
             user_prompt=json.dumps(graph_data),
         )
@@ -97,7 +97,7 @@ def ai_review(graph: Graph) -> List[AIChange]:
         print(raw)
 
         parsed = json.loads(raw)
-    except (Ollama_client_error,json.JSONDecodeError):
+    except (Groq_client_error,json.JSONDecodeError):
         return[]
     
     if not isinstance(parsed,list):
