@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes to Flow</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <h1>Note2Flow</h1>
+  </header>
+
+  <div id="app-container">
+    <!-- LEFT PANEL: EDITOR -->
+    <div id="notes-panel">
+      <div id="editor-toolbar">
+        <button data-action="bold" title="Bold">B</button>
+        <button data-action="italic" title="Italic">I</button>
+        <button data-action="h1" title="Heading 1">H1</button>
+        <button data-action="h2" title="Heading 2">H2</button>
+        <button data-action="h3" title="Heading 3">H3</button>
+        <button data-action="h4" title="Heading 4">H4</button>
+        <button data-action="ul" title="Bullet List">• List</button>
+      </div>
+
+      <div id="editor" contenteditable="true" spellcheck="true">
+        <p>Start typing your notes here...</p>
+      </div>
+
+      <div id="editor-controls">
+        <button id="format-generate-flow" class="btn btn-primary">Format & Generate</button>
+        <button id="generate-flow" class="btn btn-secondary">Generate Flow</button>
+        <label class="checkbox-label">
+          <input type="checkbox" id="enable-ai-review">
+          Enable AI Review
+        </label>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: GRAPH -->
+    <div id="flow-container">
+      <div id="flow-panel"></div>
+      
+      <div id="graph-controls">
+        <div class="control-group">
+          <button id="zoom-in" class="btn btn-icon" title="Zoom In">+</button>
+          <button id="zoom-out" class="btn btn-icon" title="Zoom Out">−</button>
+          <button id="fit-view" class="btn btn-icon" title="Fit to View">⊡</button>
+          <button id="reset-pan" class="btn btn-icon" title="Reset Pan">⊕</button>
+        </div>
+        <div class="control-group">
+          <button id="export-png" class="btn btn-icon" title="Export as PNG">⬇ PNG</button>
+          <button id="export-svg" class="btn btn-icon" title="Export as SVG">⬇ SVG</button>
+        </div>
+      </div>
+
+      <div id="placeholder">
+        <p>Flowchart will appear here</p>
+        <p class="hint">Start typing in the editor to begin</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+  <script src="https://unpkg.com/cytoscape-svg/build/cytoscape-svg.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

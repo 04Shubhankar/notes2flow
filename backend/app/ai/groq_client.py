@@ -8,7 +8,7 @@ class Groq_client_error(RuntimeError):
     """Raised when Groq API call fails"""
     pass
 
-# Configure API key
+# API key
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def ask_groq(
