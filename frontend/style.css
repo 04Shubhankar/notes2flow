@@ -59,11 +59,6 @@ body {
   overflow: hidden;
 }
 
-#editor:empty::before {
-  content: attr(data-placeholder);
-  color: #6b7280;
-  pointer-events: none;
-}
 
 .placeholder-logo {
   width: 350px;;
