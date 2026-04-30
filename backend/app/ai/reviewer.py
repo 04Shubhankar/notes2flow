@@ -24,18 +24,78 @@ Your three jobs:
    rename it to plain language that a student understands.
    Do not change meaning, only wording. Prioritize clarity and simplicity.
    You can change "Photosynthesis Light Reactions" to "Light Reactions" or "Thylakoid Membrane Processes" if that makes it clearer. Use your best judgment on what simplifications will help a student the most, but do NOT remove important details.
-   Dont reduce it to the point of losing critical information. For example, "RuBP carboxylation" should not be simplified to just "Carbon Fixation" if it loses the specific detail that it's about RuBP. However, "Calvin Cycle Steps" can be simplified to "Carbon Fixation Cycle" since it's already clear that it's about carbon fixation and the cycle aspect is more important than the word "steps".
+   You may change words in a sententence but do not remove the sentence itself. For example, "Light-Dependent Reactions" can be simplified to "Light Reactions" but should not be removed entirely.
+
 
    Style rules:
    - Use noun phrases, NOT questions ("Light Reactions" not "What are light reactions?")
    - Use simple verbs if needed ("Energy Production", "Water Splitting", "Carbon Fixation")
    - Remove redundancy ("Reactions" not "Light-Dependent Reactions Processes")
    
-   Examples of good simplifications:
-   - "Photophosphorylation" → "Energy Production"
-   - "Thylakoid Membrane Processes" → "Light Reactions"
-   - "RuBP carboxylation" → "Carbon Fixation"
-   - "Calvin Cycle Steps" → "Carbon Fixation Cycle" (already good, no change)
+   JARGON SIMPLIFICATION EXAMPLES:
+
+Direct word replacements:
+- "Photophosphorylation" → "Energy Production"
+- "Thylakoid Membrane Processes" → "Light Reactions"
+- "RuBP carboxylation" → "Carbon Fixation"
+- "Osmotic Potential" → "Water Movement Pressure"
+- "Transcription Factor Binding" → "Gene Activation"
+- "Mitochondrial Cristae" → "Energy-Making Structures"
+- "Hydrolysis Reaction" → "Breaking Bonds with Water"
+
+Sentence structure changes ALLOWED (not just word substitution):
+
+ORIGINAL: "The electron transport chain utilizes redox reactions to establish a proton gradient."
+SIMPLIFIED: "Electrons move through proteins, pumping protons to create an energy difference."
+RULE: Explain the mechanism in simpler terms, break complex verbs into action steps.
+
+ORIGINAL: "Heterogeneous catalysts facilitate reaction rates via surface area interactions."
+SIMPLIFIED: "More surface area of a catalyst means faster reactions."
+RULE: Remove technical verbs (facilitate, utilize), use direct cause-effect.
+
+ORIGINAL: "Enzymatic substrate specificity is determined by the three-dimensional structure of the active site."
+SIMPLIFIED: "The enzyme's shape determines which molecules it can work with."
+RULE: Replace "determined by" with simpler causality.
+
+ORIGINAL: "Osmotic regulation in plant cells prevents plasmolysis through vacuolar solute accumulation."
+SIMPLIFIED: "Plant cells store dissolved particles in their vacuole to keep water inside."
+RULE: Replace passive/complex structures with active, concrete language.
+
+ORIGINAL: "DNA methylation silences gene expression via chromatin remodeling."
+SIMPLIFIED: "Adding methyl groups to DNA turns genes off by changing how tightly DNA is packed."
+RULE: Explain the chain of cause-effect step by step.
+
+ORIGINAL: "Photosynthetic organisms exhibit quantum coherence in light-harvesting complexes."
+SIMPLIFIED: "Plants use a quantum trick to capture light energy with almost perfect efficiency."
+RULE: Acknowledge the complexity but explain the outcome in relatable terms.
+
+GUIDELINES FOR FLEXIBILITY:
+
+1. VERB SIMPLIFICATION:
+   - Complex: utilize, facilitate, exhibit, demonstrate, elucidate
+   - Simple: use, help, show, prove, explain
+   - Rule: Replace with active, everyday verb
+
+2. NOUN SIMPLIFICATION:
+   - Complex: "substrate specificity" → "enzyme preference"
+   - Complex: "metabolic flux" → "how fast reactions happen"
+   - Complex: "osmotic potential" → "water pressure"
+   - Rule: Replace technical noun phrases with their mechanism/outcome
+
+3. STRUCTURE CHANGES:
+   - Complex: "X is determined by Y via Z"
+   - Simple: "Y causes X by doing Z" OR "Y's Z makes X happen"
+   - Rule: Convert passive → active, reorder for clarity
+
+4. ABSTRACTION TO CONCRETE:
+   - Complex: "nucleophilic substitution reactions"
+   - Simple: "electron-rich molecules attacking electron-poor molecules"
+   - Rule: Replace abstract labels with what's actually happening
+
+5. MECHANISM UNPACKING:
+   - Complex: "ATP synthase generates ATP through chemiosmotic coupling"
+   - Simple: "A protein spins as protons flow through it, and this spinning energy makes ATP"
+   - Rule: If the header is a mechanism, break it into steps
 
 2. FIX LOGICAL RELATIONS: Review the graph structure. If a node's label does
    not logically belong under its parent, rename it to clarify relationships.

@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Notes to Flow</title>
+  <title>notes2flow</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header class="app-header">
-    <h1>Note2Flow</h1>
+    <div class="brand">
+      <img src="logo.png" alt="notes2flow logo" class="app-logo" />
+      <h1>notes2flow</h1>
+    </div>
   </header>
 
   <div id="app-container">
@@ -25,9 +29,7 @@
         <button data-action="ul" title="Bullet List">• List</button>
       </div>
 
-      <div id="editor" contenteditable="true" spellcheck="true">
-        <p>Start typing your notes here...</p>
-      </div>
+      <div id="editor" contenteditable="true" data-placeholder="Start typing your notes here..."></div>
 
       <div id="editor-controls">
         <button id="format-generate-flow" class="btn btn-primary">Format & Generate</button>
@@ -56,8 +58,9 @@
       </div>
 
       <div id="placeholder">
+        <img src="placeholder-logo.png" alt="notes2flow logo" class="placeholder-logo" />
         <p>Flowchart will appear here</p>
-        <p class="hint">Start typing in the editor to begin</p>
+        <p class="hint">Start typing in the editor and click "Generate Flow"</p>
       </div>
     </div>
   </div>

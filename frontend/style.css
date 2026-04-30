@@ -14,7 +14,7 @@ body {
 
 /* ==================== HEADER ==================== */
 .app-header {
-  height: 56px;
+  height: 64px;
   background: #1a202c;
   color: white;
   display: flex;
@@ -23,6 +23,18 @@ body {
   padding: 0 16px;
   border-bottom: 1px solid #0f1419;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-logo {
+  width: auto;
+  height: 60px;
+  object-fit: contain;
 }
 
 .app-header h1 {
@@ -45,6 +57,19 @@ body {
   background: #ffffff;
   border-right: 1px solid #e2e8f0;
   overflow: hidden;
+}
+
+#editor:empty::before {
+  content: attr(data-placeholder);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.placeholder-logo {
+  width: 350px;;
+  height: auto;
+  margin-bottom: 16px;
+  opacity: 0.5;
 }
 
 #flow-container {
