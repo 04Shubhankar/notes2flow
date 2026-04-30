@@ -44,6 +44,7 @@ EXAMPLE OF WHAT NOT TO DO (WRONG):
 <h2>Static Linking</h2>  ← WRONG: should be H3 under "Types of Linking"
 <ul><li>Details...</li></ul>
 
+
 EXAMPLE OF CORRECT STRUCTURE:
 <h2>Types of Linking</h2>
   <h3>Static Linking</h3>

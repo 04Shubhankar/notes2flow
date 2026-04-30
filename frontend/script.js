@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const formatGenerateBtn = document.getElementById("format-generate-flow");
   const enableReviewCheckbox = document.getElementById("enable-ai-review");
   
+  
   // Graph control buttons
   const zoomInBtn = document.getElementById("zoom-in");
   const zoomOutBtn = document.getElementById("zoom-out");
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let latestPayload = null;
   let cy = null; // Global cytoscape instance
+  
+  
 
   /* -------------------- TOOLBAR -------------------- */
   formatGenerateBtn.addEventListener("click", async () => {
@@ -42,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       editor.innerHTML = result.html;
+      editor.dispatchEvent(new Event("input", { bubbles: true })); 
       renderGraph(result.graph);
     } catch (error) {
       console.error("Format error:", error);
@@ -91,55 +95,60 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   editor.addEventListener("input", () => {
-    editor.querySelectorAll("p > ul, p > ol").forEach(list => {
-      list.parentNode.insertAdjacentElement("afterend", list);
-    });
+  const nodes = [];
+  
+  function parseNode(child) {
+    let text = "";
+    let importance = 2;
 
-    const nodes = [];
-    editor.childNodes.forEach(child => {
-      let text = "";
-      let importance = 2;
-
-      if (child.nodeName === "H1") {
-        text = child.innerText.trim();
-        importance = 1;
-      } else if (child.nodeName === "H2") {
-        text = child.innerText.trim();
-        importance = 2;
-      } else if (child.nodeName === "H3") {
-        text = child.innerText.trim();
-        importance = 3;
-      } else if (child.nodeName === "H4") {
-        text = child.innerText.trim();
-        importance = 4;
-      } else if (child.nodeName === "P") {
-        const paraText = child.innerText.trim();
-        if (paraText.startsWith("• ") || paraText.startsWith("- ") || /^\d+\.\s/.test(paraText)) {
-          text = paraText;
-          importance = 5;
-        } else {
-          text = paraText;
+    if (child.nodeName === "H1") {
+      text = child.innerText.trim();
+      importance = 1;
+    } else if (child.nodeName === "H2") {
+      text = child.innerText.trim();
+      importance = 2;
+    } else if (child.nodeName === "H3") {
+      text = child.innerText.trim();
+      importance = 3;
+    } else if (child.nodeName === "H4") {
+      text = child.innerText.trim();
+      importance = 4;
+    } else if (child.nodeName === "LI") {
+      text = child.innerText.trim();
+      importance = 5;
+    } else if (child.nodeName === "UL" || child.nodeName === "OL") {
+      // Recursively parse list items
+      child.querySelectorAll(":scope > li").forEach(li => {
+        const t = li.innerText.trim();
+        if (t.length > 0) {
+          nodes.push({ text: t, importance: 5 });
         }
-      } else if (child.nodeName === "LI") {
-        text = child.innerText.trim();
-        importance = 5;
-      } else if (child.nodeName === "UL" || child.nodeName === "OL") {
-        child.querySelectorAll("li").forEach(li => {
-          const t = li.innerText.trim();
-          if (t.length > 0) {
-            nodes.push({ text: t, importance: 5 });
-          }
-        });
-        return;
-      } else {
-        text = child.innerText ? child.innerText.trim() : child.textContent.trim();
+      });
+      return; // Skip adding list itself, only add items
+    } else if (child.nodeName === "P") {
+      const paraText = child.innerText.trim();
+      if (paraText.length > 0) {
+        text = paraText;
       }
+    } else {
+      text = child.innerText ? child.innerText.trim() : child.textContent.trim();
+    }
 
-      if (text.length > 0) nodes.push({ text, importance });
-    });
+    if (text.length > 0) {
+      nodes.push({ text, importance });
+    }
+  }
 
-    latestPayload = { nodes, ai_review: enableReviewCheckbox.checked };
+  // Parse all direct children
+  editor.childNodes.forEach(child => {
+    if (child.nodeType === 1) { // Element node only
+      parseNode(child);
+    }
   });
+
+  latestPayload = { nodes, ai_review: enableReviewCheckbox.checked };
+  console.log("Updated latestPayload:", latestPayload);
+});
 
   /* -------------------- API CALL -------------------- */
   async function callParseApi(payload) {
@@ -185,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cy = cytoscape({
       container: flowPanel,
-      wheelSensitivity: 0.1,
+      wheelSensitivity: 0.5,
       
       elements: [
         ...graph.nodes.map(node => ({
@@ -320,12 +329,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
 
       layout: {
-        name: "breadthfirst",
-        directed: true,
-        padding: 50,
-        spacingFactor: 1.3,
-        avoidOverlap: true
-      }
+      name: "breadthfirst",
+      directed: true,
+      rankDir: "TB",
+      ranker: "tight-tree",
+      nodeSep: 50,
+      edgeSep: 10,
+      rankSep: 80
+    }
     });
 
     // Fit and center
@@ -363,17 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
       downloadImage(pngData, "flowchart.png");
     });
 
-    exportSvgBtn.addEventListener("click", () => {
-      try {
-        // Cytoscape has limited SVG export. Fallback: export as PNG
-        const pngData = cy.png({ scale: 2, full: true });
-        downloadImage(pngData, "flowchart.png");
-        console.warn("SVG export via canvas fallback (PNG)");
-      } catch (error) {
-        console.error("SVG export error:", error);
-        alert("SVG export not available. Using PNG instead.");
-      }
-    });
+
 
     // Mouse wheel zoom (smooth)
     cy.on("wheel", (e) => {
