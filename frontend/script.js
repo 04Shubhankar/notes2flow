@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  cytoscape.use(cytoscapeDagre);
   console.log("Notes to Flow loaded");
 
   const toolbar = document.getElementById("editor-toolbar");
@@ -226,8 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto",
             color: "#ffffff",
             "background-color": "#2563eb",
-            width: "160px",
-            height: "60px",
+            width: "label",
+            height: "label",
             padding: "12px",
             shape: "roundrectangle",
             "border-width": "2px",
@@ -243,8 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
             color: colorPalette[1].text,
             "font-size": "14px",
             "font-weight": "bold",
-            width: "180px",
-            height: "70px",
+            width: "label",
+            height: "label",
             padding: "16px"
           }
         },
@@ -255,8 +256,8 @@ document.addEventListener("DOMContentLoaded", () => {
             color: colorPalette[2].text,
             "font-size": "13px",
             "font-weight": "600",
-            width: "170px",
-            height: "65px",
+            width: "label",
+            height: "label",
             padding: "14px"
           }
         },
@@ -266,8 +267,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "background-color": colorPalette[3].bg,
             color: colorPalette[3].text,
             "font-size": "12px",
-            width: "160px",
-            height: "60px",
+            width: "label",
+            height: "label",
             padding: "12px"
           }
         },
@@ -277,8 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "background-color": colorPalette[4].bg,
             color: colorPalette[4].text,
             "font-size": "11px",
-            width: "150px",
-            height: "55px",
+            width: "label",
+            height: "label",
             padding: "10px"
           }
         },
@@ -288,8 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "background-color": colorPalette[5].bg,
             color: colorPalette[5].text,
             "font-size": "11px",
-            width: "140px",
-            height: "50px",
+            width: "label",
+            height: "label",
             padding: "8px"
           }
         },
@@ -308,14 +309,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         },
         {
-          selector: "edge",
+  selector: "edge",
           style: {
-            width: 2,
+            "width": 2,
             "line-color": "#64748b",
             "target-arrow-color": "#64748b",
             "target-arrow-shape": "triangle",
-            "curve-style": "bezier",
-            "arrow-scale": 1.5
+            "arrow-scale": 1.2,
+            
+            "curve-style": "taxi",         
+            "taxi-direction": "vertical",  
+            "taxi-turn": 20               
           }
         },
         {
@@ -329,19 +333,23 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
 
       layout: {
-      name: "breadthfirst",
-      directed: true,
-      rankDir: "TB",
-      ranker: "tight-tree",
-      nodeSep: 50,
-      edgeSep: 10,
-      rankSep: 80
-    }
+        name: "dagre",       
+        rankDir: "TB",       
+        nodeSep: 80,         
+        rankSep: 100,        
+        padding: 50          
+      }
     });
 
-    // Fit and center
-    cy.fit();
-    cy.center();
+    cy.on('layoutstop', () => {
+      cy.fit();
+      cy.center();
+    });
+
+    cy.animate({
+    fit: { padding: 30 },
+    duration: 500
+    });
 
     // Enable interaction
     setupGraphInteraction();
