@@ -9,8 +9,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generate-flow");
   const formatGenerateBtn = document.getElementById("format-generate-flow");
   const enableReviewCheckbox = document.getElementById("enable-ai-review");
-  
-  
+
+  const editorPlaceholderText = "Start typing or paste your notes here...";
+
+  function isEditorShowingPlaceholder() {
+    const firstChild = editor.firstElementChild;
+    return firstChild?.classList.contains("editor-placeholder");
+  }
+
+  function clearEditorPlaceholder() {
+    if (isEditorShowingPlaceholder()) {
+      editor.innerHTML = "";
+    }
+  }
+
+  function restoreEditorPlaceholderIfEmpty() {
+    if (editor.innerText.trim() === "") {
+      editor.innerHTML = `<p class="editor-placeholder">${editorPlaceholderText}</p>`;
+    }
+  }
+
+  editor.addEventListener("focus", clearEditorPlaceholder);
+  editor.addEventListener("blur", restoreEditorPlaceholderIfEmpty);
+
   // Graph control buttons
   const zoomInBtn = document.getElementById("zoom-in");
   const zoomOutBtn = document.getElementById("zoom-out");
@@ -96,7 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   editor.addEventListener("input", () => {
-  const nodes = [];
+    clearEditorPlaceholder();
+
+    const nodes = [];
   
   function parseNode(child) {
     let text = "";
