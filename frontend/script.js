@@ -29,6 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function displayLoader(show) {
+    const loader = document.getElementById("loader");
+    if (show) {
+      loader.style.display = "flex";
+      loader.style.justifyContent = "center";
+      loader.style.alignItems = "center";
+    } else {
+      loader.style.display = "none";
+    }
+
+    loader.style.display = show ? "flex" : "none";
+  }
+
+  displayLoader(false);
+
   editor.addEventListener("focus", clearEditorPlaceholder);
   editor.addEventListener("blur", restoreEditorPlaceholderIfEmpty);
 
@@ -54,12 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
+      displayLoader(true);
       const response = await fetch("http://127.0.0.1:8000/graph/format", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ raw_text: rawText })
       });
-
+      
       const result = await response.json();
       if (!response.ok || !result.graph) {
         alert("Formatting failed: " + (result.detail || "Unknown error"));
@@ -73,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Format error:", error);
       alert("Failed to format notes: " + error.message);
     }
+    finally {
+      displayLoader(false);
+    } 
   });
 
   toolbar.addEventListener("click", (e) => {
@@ -198,12 +217,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
+      displayLoader(true);
       const result = await callParseApi(latestPayload);
       console.log("Backend graph:", result.graph);
       renderGraph(result.graph);
     } catch (error) {
       console.error("Parse error:", error);
       alert("Failed to generate flow: " + error.message);
+    }
+    finally {
+      displayLoader(false);
     }
   });
 
