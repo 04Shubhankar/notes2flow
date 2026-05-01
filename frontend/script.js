@@ -165,8 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Parse all direct children
   editor.childNodes.forEach(child => {
-    if (child.nodeType === 1) { // Element node only
+    if (child.nodeType === 1) { // Element node
       parseNode(child);
+    } else if (child.nodeType === 3) { // Text node
+      const text = child.textContent.trim();
+      if (text.length > 0) {
+        nodes.push({ text, importance: 2 });
+      }
     }
   });
 

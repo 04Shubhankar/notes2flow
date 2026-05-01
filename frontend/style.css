@@ -46,7 +46,7 @@ body {
 /* ==================== LAYOUT ==================== */
 #app-container {
   display: flex;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 64px);
   gap: 0;
 }
 
@@ -187,16 +187,29 @@ body {
 }
 
 .checkbox-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #4a5568;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   cursor: pointer;
-  user-select: none;
+}
+
+.checkbox-label:hover {
+  background: #edf2f7;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
 }
 
 .checkbox-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
   cursor: pointer;
 }
 
