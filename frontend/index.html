@@ -37,16 +37,22 @@
         id="editor"
         contenteditable="true"
         spellcheck="true"
+        data-max-chars="3000"
       >
         <p class="editor-placeholder">Start typing or paste your notes here...</p>
       </div>
+      
+      <!--<p id="char-count">0 / 3000</p> -->
+      <p id="error-msg">
+        Character limit reached — can't add more text right now
+      </p>
 
       <div id="editor-controls">
         <button id="format-generate-flow" class="btn btn-primary">Format & Generate</button>
         <button id="generate-flow" class="btn btn-secondary">Generate Flow</button>
         <label class="checkbox-label">
           <input type="checkbox" id="enable-ai-review">
-          Enable AI Review
+          Simplify Graph
         </label>
       </div>
     </div>

@@ -12,6 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const editorPlaceholderText = "Start typing or paste your notes here...";
 
+  let graphInteractionSetup = false;
+
+  const charCount = document.getElementById('char-count');
+  const errorMsg = document.getElementById('error-msg');
+  const MAX = 3000;
+
+
   function isEditorShowingPlaceholder() {
     const firstChild = editor.firstElementChild;
     return firstChild?.classList.contains("editor-placeholder");
@@ -43,6 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   displayLoader(false);
+
+  editor.addEventListener('input', () => {
+    let text = editor.innerText;
+    
+    if (text.length > MAX) {
+      editor.innerText = text.substring(0, MAX);
+      errorMsg.style.display = 'block';
+      editor.style.borderColor = 'red';
+    } else {
+      errorMsg.style.display = 'none';
+      editor.style.borderColor = '';
+    }
+    
+    charCount.textContent = `${editor.innerText.length} / ${MAX}`;
+  });
 
   editor.addEventListener("focus", clearEditorPlaceholder);
   editor.addEventListener("blur", restoreEditorPlaceholderIfEmpty);
@@ -234,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderGraph(graph) {
     flowPanel.innerHTML = "";
     placeholder.style.display = "none";
+    const isMobile = window.innerWidth < 768;
 
     // Professional color palette for hierarchy levels
     const colorPalette = {
@@ -384,13 +407,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
 
       layout: {
-        name: "dagre",       
-        rankDir: "TB",       
-        nodeSep: 80,         
-        rankSep: 100,        
-        padding: 50          
-      }
-    });
+      name: "dagre",
+      rankDir: "TB",
+      // 2. Use the ternary operators here
+      nodeSep: isMobile ? 40 : 80, 
+      rankSep: isMobile ? 60 : 100,
+      padding: isMobile ? 20 : 50
+    }
+  });
 
     cy.on('layoutstop', () => {
       cy.fit();
@@ -408,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* -------------------- GRAPH INTERACTION -------------------- */
   function setupGraphInteraction() {
-    if (!cy) return;
+    if (!cy || graphInteractionSetup) return; // Exit if already set up
 
     // Zoom controls
     zoomInBtn.addEventListener("click", () => {
@@ -433,8 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
       downloadImage(pngData, "flowchart.png");
     });
 
-
-
     // Mouse wheel zoom (smooth)
     cy.on("wheel", (e) => {
       if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
@@ -448,13 +470,15 @@ document.addEventListener("DOMContentLoaded", () => {
     cy.on("tap", "node", (e) => {
       console.log("Clicked node:", e.target.data());
     });
-  }
+
+    graphInteractionSetup = true; // Mark as set up
+}
 
   /* -------------------- EXPORT HELPER -------------------- */
   function downloadImage(dataUrl, filename) {
     const link = document.createElement("a");
     link.href = dataUrl;
-    link.download = filename;
+    link.download = `notes2flow-${filename}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

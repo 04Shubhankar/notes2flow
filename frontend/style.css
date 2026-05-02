@@ -33,6 +33,28 @@ body {
   object-fit: contain;
 }
 
+#error-msg {
+  display: none;
+  color: #7f1d1d;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  padding: 6px 0;
+  border-top: 2px solid #fca5a5;
+  font-weight: 500;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ==================== HEADER ==================== */
 .app-header {
   height: 64px;
