@@ -44,7 +44,7 @@ def ask_groq(
         )
         
         content = response.choices[0].message.content
-        print(content, flush=True)
+        #print(content, flush=True)
         print(f"\n[GROQ] Response complete ({len(content)} chars)")
         
     except Exception as e:

@@ -155,8 +155,8 @@ def ai_review(graph: Graph) -> List[AIChange]:
             system_prompt=SYSTEM_PROMPT,
             user_prompt=json.dumps(graph_data),
         )
-        print("\n[AI RAW OUTPUT]")
-        print(raw)
+        print("\n[AI RAW OUTPUT SUCCESS]")
+        #print(raw)
 
         parsed = json.loads(raw)
     except (Groq_client_error,json.JSONDecodeError):

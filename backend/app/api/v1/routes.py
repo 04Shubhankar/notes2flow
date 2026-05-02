@@ -1,3 +1,5 @@
+from platform import node
+
 from fastapi import APIRouter, HTTPException
 
 from app.ai.formatter import format_blob
@@ -66,9 +68,10 @@ def parse_graph(request: ParseRequest):
         graph = refine_graph(graph)
 
     # Print node IDs for debugging
-    print("Processed -  Node --> IDs:")
-    for node in graph.nodes:
-        print(f"{node.label} --> {node.id}")
+    #print("Processed -  Node --> IDs:")
+    print("Processed nodes:", len(graph.nodes))
+    #for node in graph.nodes:
+        #print(f"{node.label} --> {node.id}")
 
     return {
     "graph": {
