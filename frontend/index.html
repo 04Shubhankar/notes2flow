@@ -47,13 +47,19 @@
         Character limit reached — can't add more text right now
       </p>
 
+      <p id="simplify-hint">
+            Click Generate Flow after enabling simplification.
+      </p>
+
       <div id="editor-controls">
-        <button id="format-generate-flow" class="btn btn-primary">Format & Generate</button>
-        <button id="generate-flow" class="btn btn-secondary">Generate Flow</button>
-        <label class="checkbox-label">
-          <input type="checkbox" id="enable-ai-review">
+        <button id="format-generate-flow" class="btn btn-primary" title="Cleans up messy notes and create a graph">Format & Generate</button>
+        <button id="generate-flow" class="btn btn-secondary" title="Generate flowchart from current notes">Generate Flow</button>
+        <label class="checkbox-label" title="Attempt to simplify the graph.">
+          <input type="checkbox" id="simplifyGraphBtn">
           Simplify Graph
         </label>
+        
+
       </div>
     </div>
 

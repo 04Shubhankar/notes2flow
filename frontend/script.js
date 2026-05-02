@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const placeholder = document.getElementById("placeholder");
   const generateBtn = document.getElementById("generate-flow");
   const formatGenerateBtn = document.getElementById("format-generate-flow");
-  const enableReviewCheckbox = document.getElementById("enable-ai-review");
+  const simplifyGraphBtn = document.getElementById("simplifyGraphBtn");
 
   const editorPlaceholderText = "Start typing or paste your notes here...";
 
@@ -150,10 +150,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* -------------------- INPUT PARSING -------------------- */
-  enableReviewCheckbox.addEventListener("change", () => {
+  simplifyGraphBtn.addEventListener("change", () => {
+    const hint = document.getElementById("simplify-hint");
+    
+    if (!cy) {
+      alert("Click 'Generate Flow' first to create a graph");
+      simplifyGraphBtn.checked = false;
+      hint.style.display = "none";
+      return;
+    }
+
+    if (simplifyGraphBtn.checked) {
+      hint.style.display = "block";
+    } else {
+      hint.style.display = "none";
+    }
+
     if (latestPayload) {
-      latestPayload.ai_review = enableReviewCheckbox.checked;
-      console.log("AI Review enabled:", enableReviewCheckbox.checked);
+      latestPayload.ai_review = simplifyGraphBtn.checked;
+      console.log("AI Review enabled:", simplifyGraphBtn.checked);
     }
   });
 
@@ -216,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  latestPayload = { nodes, ai_review: enableReviewCheckbox.checked };
+  latestPayload = { nodes, ai_review: simplifyGraphBtn.checked };
   console.log("Updated latestPayload:", latestPayload);
 });
 
