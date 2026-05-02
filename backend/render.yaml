@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: notes-to-flow-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --worker-class uvicorn.workers.UvicornWorker
+    envVars:
+      - key: GROQ_API_KEY
+        scope: build
+        sync: false

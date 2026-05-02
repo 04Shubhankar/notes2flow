@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       displayLoader(true);
-      const response = await fetch("http://127.0.0.1:8000/graph/format", {
+      const response = await fetch("https://notes2flow.netlify.app//graph/format", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ raw_text: rawText })
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* -------------------- API CALL -------------------- */
   async function callParseApi(payload) {
-    const response = await fetch("http://127.0.0.1:8000/graph/parse", {
+    const response = await fetch("https://notes2flow.netlify.app//graph/parse", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
