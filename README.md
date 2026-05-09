@@ -98,7 +98,6 @@ No signup. Just paste and generate.
 - **Backend:** Python + FastAPI
 - **Visualization:** Cytoscape.js
 - **AI Parsing:** Groq API 
-- **Local Option:** Ollama + gemma2:2b 
 
 ## Contributing
 
