@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       editor.style.borderColor = '';
     }
     
-    charCount.textContent = `${editor.innerText.length} / ${MAX}`;
+    /*charCount.textContent = `${editor.innerText.length} / ${MAX}`;*/
   });
 
   editor.addEventListener("focus", clearEditorPlaceholder);

@@ -124,6 +124,9 @@ Rules:
 - For importance: payload MUST be exactly { "to": <integer between 1 and 5> }
 - Do NOT include old values or extra keys.
 - Do NOT wrap response in markdown or code fences.
+- Do NOT REDUCE DEFINATION OR STATEMENT TO TOPIC NAMES. For example, if a node is "Light-Dependent Reactions" do not change it to "Light Reactions" if that would remove important details. Instead, you can change it to "Light Reactions (Light-Dependent)" or something that preserves the original meaning while simplifying the language.
+- Do NOT RETURN QUESTION STARTING WHO WHAT WHY HOW. Instead repeat the original statement but in simpler language.
+- DO NOT RETURN TERMS LIKE X PROCESSES or X REACTIONS if that is redundant. For example, "Photosynthesis in the process by which plants convert light energy into chemical energy" can be simplified to "Photosynthesis: plants turn light into energy" and not to "Photosynthesis Processes" or "Photosynthesis Reactions"
 - Maximum 8 changes per review (prioritize clarity over perfection).
 """
 
