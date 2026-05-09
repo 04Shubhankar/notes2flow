@@ -1,24 +1,126 @@
 #info-popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
-
   z-index: 9999;
+  padding: 20px;
 }
 
 #info-popup {
-  width: min(900px, 90%);
+  width: min(920px, 92%);
   max-height: 90vh;
-
   overflow-y: auto;
+  background: #ffffff;
+  border: 5px solid #ffffff;
+  border-radius: 15px;
+  padding: 32px;
+  position: relative;  
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.04);
+  color: #111827;
+}
 
-  background: #111827;
-  border-radius: 20px;
+#close-popup {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #111827;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: auto !important;
+  z-index: 10000;
+}
 
-  padding: 24px;
+#close-popup:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.popup-video {
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  pointer-events: none;
+
+  border: 1px solid #e5e7eb;
+}
+
+.popup-video video {
+  width: 100%;
+  display: block;
+}
+
+.popup-content {
+  display: grid;
+  gap: 18px;
+}
+
+.popup-content section {
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  padding: 20px;
+}
+
+.popup-content h2 {
+  margin-bottom: 14px;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.popup-content ul {
+  padding-left: 18px;
+}
+
+.popup-content li {
+  margin-bottom: 10px;
+
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+#close-popup {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f4f6;
+  color: #111827;
+
+  font-size: 1.3rem;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+#close-popup:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+#info-popup-overlay.hidden {
+  display: none;
 }
