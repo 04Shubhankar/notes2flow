@@ -1,7 +1,7 @@
 async function loadPopup() {
   try {
     // Fetch popup HTML
-    const response = await fetch("./popup-modal.html");
+    const response = await fetch("/popup-modal.html");
     const html = await response.text();
 
     // Inject popup into DOM
