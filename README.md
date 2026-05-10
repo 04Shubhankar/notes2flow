@@ -99,6 +99,18 @@ No signup. Just paste and generate.
 - **Visualization:** Cytoscape.js
 - **AI Parsing:** Groq API 
 
+## Local Development (Ollama Version)
+
+Want to run notes2flow completely locally without API costs?
+
+```bash
+git checkout backup/ollama-local-version
+```
+
+See that branch's README for Ollama setup instructions.
+
+**Note:** This version is not actively maintained. Main branch uses Groq API for cloud deployment.
+
 ## Contributing
 
 Have an idea or found a bug? Open an issue or PR on [GitHub](https://github.com/yourusername/notes2flow).
