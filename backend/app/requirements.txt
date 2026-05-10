@@ -1,4 +1,7 @@
-fastapi==0.104.1
-pydantic==2.5.0
-ollama==0.1.9
-uvicorn==0.24.0
+fastapi
+uvicorn
+groq
+python-multipart
+pydantic
+python-dotenv
+beautifulsoup4
