@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>notes2flow</title>
+  <link rel="icon" type="image/png" href="./assets/logo.png" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand">
+      <img src="./assets/logo.png" alt="notes2flow logo" class="app-logo" />
+      <h1>notes2flow</h1>
+    </div>
+  </header>
+
+  <div id="loader">
+    <video autoplay muted loop playsinline>
+      <source src="./assets/loader.webm" type="video/webm" />
+    </video>
+  </div>
+
+  <div id="app-container">
+    <!-- LEFT PANEL: EDITOR -->
+    <div id="notes-panel">
+      <div id="editor-toolbar">
+        <button data-action="bold" title="Bold">B</button>
+        <button data-action="italic" title="Italic">I</button>
+        <button data-action="h1" title="Heading 1">H1</button>
+        <button data-action="h2" title="Heading 2">H2</button>
+        <button data-action="h3" title="Heading 3">H3</button>
+        <button data-action="h4" title="Heading 4">H4</button>
+        <button data-action="ul" title="Bullet List">• List</button>
+      </div>
+
+      <div
+        id="editor"
+        contenteditable="true"
+        spellcheck="true"
+        data-max-chars="3000"
+      >
+        <p class="editor-placeholder">Start typing or paste your notes here...</p>
+      </div>
+      
+      <!--<p id="char-count">0 / 3000</p> -->
+      <p id="error-msg">
+        Character limit reached — can't add more text right now
+      </p>
+
+      <p id="simplify-hint">
+            Click Generate Flow after enabling simplification.
+      </p>
+
+      <div id="editor-controls">
+        <button id="format-generate-flow" class="btn btn-primary" title="Cleans up messy notes and create a graph">Format & Generate</button>
+        <button id="generate-flow" class="btn btn-secondary" title="Generate flowchart from current notes">Generate Flow</button>
+        <label class="checkbox-label" title="Attempt to simplify the graph.">
+          <input type="checkbox" id="simplifyGraphBtn">
+          Simplify Graph
+        </label>
+        
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: GRAPH -->
+    <div id="flow-container">
+      <div id="flow-panel"></div>
+      
+      <div id="graph-controls">
+        <div class="control-group">
+          <button id="zoom-in" class="btn btn-icon" title="Zoom In">+</button>
+          <button id="zoom-out" class="btn btn-icon" title="Zoom Out">−</button>
+          <button id="fit-view" class="btn btn-icon" title="Fit to View">⊡</button>
+          <button id="reset-pan" class="btn btn-icon" title="Reset Pan">⊕</button>
+        </div>
+        <div class="control-group">
+          <button id="export-png" class="btn btn-icon" title="Export as PNG">⬇ PNG</button>
+        </div>
+      </div>
+
+      <div id="placeholder">
+        <img src="./assets/placeholder-logo.png" alt="notes2flow logo" class="placeholder-logo" />
+        <p>Flowchart will appear here</p>
+        <p class="hint">Start typing in the editor and click "Generate Flow"</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+  <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+  <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+  <script src="https://unpkg.com/cytoscape-svg/build/cytoscape-svg.js"></script>
+  
+  <script src="./script.js"></script>
+</body>
+</html>

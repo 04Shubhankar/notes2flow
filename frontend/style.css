@@ -1,0 +1,545 @@
+/* ==================== RESET & BASE ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #2d3748;
+  background: #f7fafc;
+  line-height: 1.5;
+}
+
+/* ==================== LOADER ==================== */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center; 
+  align-items: center;     
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9999; 
+  display: none; 
+}
+
+#loader video {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+#error-msg {
+  display: none;
+  color: #7f1d1d;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  padding: 6px 0;
+  border-top: 2px solid #fca5a5;
+  font-weight: 500;
+  animation: slideDown 0.3s ease-out;
+}
+
+#simplify-hint {
+  display: none;
+  color: #3912c5;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  padding: 6px 0;
+  border-top: 2px solid #fca5a5;
+  font-weight: 500;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Simplify Graph Popup */
+.simplify-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+  max-width: 90%;
+}
+
+/* ==================== HEADER ==================== */
+.app-header {
+  height: 64px;
+  background: #1a202c;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #0f1419;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-logo {
+  width: auto;
+  height: 60px;
+  object-fit: contain;
+}
+
+.app-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== LAYOUT ==================== */
+#app-container {
+  display: flex;
+  height: calc(100vh - 64px);
+  gap: 0;
+}
+
+#notes-panel {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+
+.placeholder-logo {
+  width: 350px;;
+  height: auto;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+#flow-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #edf2f7;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==================== TOOLBAR ==================== */
+#editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+#editor-toolbar button {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e0;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+#editor-toolbar button:hover {
+  background: #edf2f7;
+  border-color: #a0aec0;
+}
+
+#editor-toolbar button:active {
+  background: #e2e8f0;
+}
+
+/* ==================== EDITOR ==================== */
+#editor {
+  flex: 1;
+  padding: 20px 24px;
+  background: #ffffff;
+  margin: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#editor:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+#editor h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+#editor h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  color: #1a202c;
+}
+
+#editor h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 12px 0 4px;
+  color: #2d3748;
+}
+
+#editor h4 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 10px 0 2px;
+  color: #4a5568;
+}
+
+#editor p {
+  margin-bottom: 10px;
+}
+
+#editor ul, #editor ol {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+#editor li {
+  margin-bottom: 4px;
+}
+
+/* ==================== EDITOR CONTROLS ==================== */
+#editor-controls {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #f7fafc;
+  border-top: 1px solid #e2e8f0;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#format-generate-flow {
+  flex: 1;
+  min-width: 140px;
+}
+
+#generate-flow {
+  flex: 1;
+  min-width: 120px;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.checkbox-label:hover {
+  background: #edf2f7;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.checkbox-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-primary:active {
+  background: #1e40af;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #2d3748;
+  border: 1px solid #cbd5e0;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e0;
+}
+
+.btn-secondary:active {
+  background: #a0aec0;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: #ffffff;
+  color: #2d3748;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+}
+
+.btn-icon:hover {
+  background: #edf2f7;
+  border-color: #a0aec0;
+}
+
+.btn-icon:active {
+  background: #e2e8f0;
+}
+
+/* ==================== GRAPH PANEL ==================== */
+#flow-panel {
+  flex: 1;
+  width: 100%;
+  background: #edf2f7;
+  position: relative;
+  overflow: hidden;
+}
+
+#placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #a0aec0;
+  pointer-events: none;
+}
+
+#placeholder p {
+  margin: 4px 0;
+  font-size: 15px;
+}
+
+#placeholder .hint {
+  font-size: 13px;
+  color: #cbd5e0;
+}
+
+/* ==================== GRAPH CONTROLS ==================== */
+#graph-controls {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.control-group {
+  display: flex;
+  gap: 4px;
+  border-right: 1px solid #e2e8f0;
+  padding-right: 8px;
+}
+
+.control-group:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  #notes-panel {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  #app-container {
+    flex-direction: column;
+  }
+
+  #notes-panel {
+    width: 100%;
+    height: 50%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  #flow-container {
+    width: 100%;
+    height: 50%;
+  }
+
+  #editor-toolbar {
+    flex-direction: row;
+    padding: 6px 8px;
+  }
+
+  #editor-toolbar button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  #editor {
+    padding: 16px;
+    margin: 8px;
+    font-size: 14px;
+  }
+
+  #editor-controls {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  #format-generate-flow,
+  #generate-flow {
+    flex: 1;
+    min-width: 80px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  #graph-controls {
+    bottom: 12px;
+    left: 12px;
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .control-group {
+    gap: 2px;
+    padding-right: 6px;
+  }
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 16px;
+  }
+
+  #notes-panel {
+    height: 45%;
+  }
+
+  #flow-container {
+    height: 55%;
+  }
+
+  #editor {
+    padding: 12px;
+    margin: 6px;
+    font-size: 13px;
+  }
+
+  #editor-controls {
+    flex-direction: column;
+  }
+
+  #format-generate-flow,
+  #generate-flow {
+    width: 100%;
+  }
+
+  .checkbox-label {
+    width: 100%;
+  }
+
+  #graph-controls {
+    flex-direction: column;
+    gap: 2px;
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .control-group {
+    flex-direction: column;
+    gap: 2px;
+    padding-right: 0;
+    border-right: none;
+  }
+
+  .btn-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+}
+
+/* ==================== SCROLLBARS ==================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
