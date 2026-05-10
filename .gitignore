@@ -10,3 +10,12 @@ __pycache__/
 .env
 node_modules/
 .DS_Store
+.vscode/settings.json
+backend/app/__init__.py
+backend/app/ai/__init__.py
+backend/app/ai/groq_client.py
+backend/app/api/__init__.py
+backend/app/core/__init__.py
+backend/app/models/__init__.py
+backend/app/utils/__init__.py
+frontend/public/scripts/script.js

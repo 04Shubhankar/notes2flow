@@ -24,7 +24,7 @@ def ask_groq(
 
     try:
         print(f"[GROQ] Sending request to {model}...")
-        
+        print(f"[GROQ] Input size: {len(system_prompt) + len(user_prompt)} chars")
         response = groq_client.chat.completions.create(
             model=model,
             messages=[
