@@ -29,7 +29,7 @@ def validate_graph(nodes):
     for idx, node in enumerate(nodes):
         """if node.text in seen:
             raise ValidationError(
-                f"Duplicate node text at index {idx}: '{node.text}'"
+                f"Duplicate node text at index {idx}"
             )"""
         seen.add(node.text)
        
