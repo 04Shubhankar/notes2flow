@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const charCount = document.getElementById('char-count');
   const errorMsg = document.getElementById('error-msg');
-  const MAX = 1500;
+  const MAX = 2500;
 
 
   function isEditorShowingPlaceholder() {
