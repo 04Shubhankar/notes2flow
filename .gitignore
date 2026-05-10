@@ -5,4 +5,8 @@ IMPLEMENTATION_PATCHES.json
 PROJECT_HANDOFF.json
 .env
 .env.local
-*.key
+*.key.vscode/
+__pycache__/
+.env
+node_modules/
+.DS_Store
