@@ -1,15 +1,42 @@
-## Core Idea
+# notes2flow — Local Ollama Version (Deprecated)
 
-The system continuously observes user-written notes and extracts logical structure such as:
-- Primary topics
-- Supporting concepts
-- Processes and sequences
-- Cause–effect relationships
+ **This branch is not actively maintained.** 
 
-This structure is visualized as a flowchart in real time, enabling faster comprehension and revision.
+For the current version , see the [main branch](https://github.com/04Shubhankar/notes2flow).
 
-## Design Principles
-- No manual "generate" action
-- Visual output must stay stable as text evolves
-- Emphasis on clarity over decoration
-- User always retains control over structure
+---
+
+## Local Setup (Ollama)
+
+This version runs completely locally using Ollama. No API costs, no internet required.
+
+### Requirements
+- Python 3.10+
+- Ollama ([Download](https://ollama.ai))
+
+### Steps
+
+1. **Pull Ollama model**
+```bash
+   ollama pull gemma2:2b
+```
+
+2. **Install dependencies**
+```bash
+   cd backend
+   pip install -r requirements.txt
+```
+
+3. **Start backend**
+```bash
+   python -m uvicorn app.main:app --reload
+```
+
+4. **Open frontend**
+   - Go to `frontend/index.html` and open in browser
+   - Or run: `python -m http.server 8000` in frontend folder
+
+5. **Use it**
+   - Paste notes → Click "Format & Generate" → Flowchart appears
+
+Done.
