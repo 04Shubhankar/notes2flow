@@ -113,7 +113,7 @@ See that branch's README for Ollama setup instructions.
 
 ## Contributing
 
-Have an idea or found a bug? Open an issue or PR on [GitHub](https://github.com/yourusername/notes2flow).
+Have an idea or found a bug? Open an issue or PR on [GitHub](https://github.com/04shubhankar/notes2flow).
 
 ## Connect
 
