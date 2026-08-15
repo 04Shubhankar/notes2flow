@@ -15,7 +15,7 @@ def ask_groq(
         system_prompt: str,
         user_prompt: str,
         *,
-        model: str = 'llama-3.3-70b-versatile'
+        model: str = 'openai/gpt-oss-120b'
 ) -> str:
     if not system_prompt.strip():
         raise ValueError("system_prompt cannot be empty")
