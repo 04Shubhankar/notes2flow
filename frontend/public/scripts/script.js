@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* -------------------- TOOLBAR -------------------- */
   formatGenerateBtn.addEventListener("click", async () => {
     const rawText = editor.innerText.trim();
-    if (!rawText || rawText.length === 0) {
+    if (!rawText || rawText.length === 0 || rawText === editorPlaceholderText) {
       alert("Please enter some text to format.");
       return;
     }
