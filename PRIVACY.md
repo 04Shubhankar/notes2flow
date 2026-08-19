@@ -27,9 +27,10 @@ Since notes are sent to external APIs, treat them like you're sharing with a thi
 ## Third-Party Services
 - **Groq API** — Processes your notes ([Groq Privacy Policy](https://groq.com/privacy))
 - **Netlify** — Hosts our frontend ([Netlify Privacy Policy](https://www.netlify.com/privacy/))
+- **Render** — Hosts our backend ([Render Privacy Policy](https://render.com/privacy))
 
 ## Questions?
 Open an issue on [GitHub](https://github.com/04Shubhankar/notes2flow)
 
 ---
-Last updated: May 10, 2026
+Last updated: August 19, 2026
