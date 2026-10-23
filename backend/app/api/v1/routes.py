@@ -1,5 +1,7 @@
 from platform import node
 
+from distributed import UploadFile
+
 from fastapi import APIRouter, HTTPException
 
 from app.ai.formatter import format_blob
@@ -7,6 +9,8 @@ from app.models.input import ParseRequest
 from app.core.pipeline import run_pipeline
 from app.ai.reviewer import refine_graph
 from pydantic import BaseModel
+
+from app.converters.document import extract_text_from_upload
 
 router = APIRouter()
 
@@ -99,3 +103,49 @@ def parse_graph(request: ParseRequest):
         "corrections": corrections
     }
 }
+
+
+@router.post("/graph/format-document")
+async def format_document(file: UploadFile = File(...)):
+    try:
+        raw_text = await extract_text_from_upload(file)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    try:
+        result = format_blob(raw_text)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    try:
+        graph, corrections = run_pipeline(result["nodes"])
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    return {
+        "html": result["html"],
+        "graph": {
+            "nodes": [
+                {
+                    "id": node.id,
+                    "label": node.label,
+                    "importance": node.importance
+                }
+                for node in graph.nodes
+            ],
+            "edges": [
+                {
+                    "id": edge.id,
+                    "source": edge.from_node,
+                    "target": edge.to_node
+                }
+                for edge in graph.edges
+            ]
+        },
+        "meta": {
+            "version": graph.version,
+            "node_count": len(graph.nodes),
+            "edge_count": len(graph.edges),
+            "corrections": corrections
+        }
+    }

@@ -20,6 +20,6 @@ async def extract_text_from_upload(file: UploadFile) -> str:
         raise ValueError("File too large. Maximum size is 10MB")
     
     buffer = BytesIO(raw_bytes)
-    md = MarkItDown()
+    md = MarkItDown()   
     result = md.convert_stream(buffer)
     return result.text_content
