@@ -14,6 +14,10 @@ app.add_middleware(
 
 app.include_router(router)
 
+@app.get("/")
+def root():
+    return {"message": "Notes to Flow API"}
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
