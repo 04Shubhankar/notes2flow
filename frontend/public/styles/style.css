@@ -246,6 +246,10 @@ body {
   flex-wrap: wrap;
 }
 
+#upload-file-btn {
+  min-width: 120px;
+}
+
 #format-generate-flow {
   flex: 1;
   min-width: 140px;

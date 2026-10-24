@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const placeholder = document.getElementById("placeholder");
   const generateBtn = document.getElementById("generate-flow");
   const formatGenerateBtn = document.getElementById("format-generate-flow");
+  const uploadBtn = document.getElementById("upload-file-btn");
+  const uploadInput = document.getElementById("file-upload");
   const simplifyGraphBtn = document.getElementById("simplifyGraphBtn");
 
   const editorPlaceholderText = "Start typing or paste your notes here...";
@@ -245,6 +247,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return await response.json();
   }
+
+  async function uploadAndFormatDocument(file) {
+    if (!file) return;
+
+    const allowedExtensions = [".pdf", ".doc", ".docx", ".ppt", ".pptx"];
+    const fileName = file.name.toLowerCase();
+    const fileType = file.type || "";
+    const allowedMimeTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "application/msword",
+      "application/vnd.ms-powerpoint"
+    ];
+
+    const hasAllowedExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+    const hasAllowedMimeType = allowedMimeTypes.includes(fileType);
+
+    if (!hasAllowedExtension && !hasAllowedMimeType) {
+      alert("Please upload a PDF, Word, or PowerPoint file.");
+      uploadInput.value = "";
+      return;
+    }
+
+    try {
+      displayLoader(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("https://notes2flow.onrender.com/graph/format-document", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.graph) {
+        alert("Document upload failed: " + (result.detail || "Unknown error"));
+        return;
+      }
+
+      editor.innerHTML = result.html || "";
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+      renderGraph(result.graph);
+    } catch (error) {
+      console.error("Document upload error:", error);
+      alert("Failed to upload document: " + error.message);
+    } finally {
+      displayLoader(false);
+      uploadInput.value = "";
+    }
+  }
+
+  uploadBtn.addEventListener("click", () => uploadInput.click());
+  uploadInput.addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uploadAndFormatDocument(file);
+    }
+  });
 
   /* -------------------- GENERATE FLOW -------------------- */
   generateBtn.addEventListener("click", async () => {
