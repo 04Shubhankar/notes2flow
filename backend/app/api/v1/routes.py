@@ -1,6 +1,4 @@
-from platform import node
-
-from distributed import UploadFile
+from fastapi import File, UploadFile
 
 from fastapi import APIRouter, HTTPException
 
