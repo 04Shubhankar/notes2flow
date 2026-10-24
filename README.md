@@ -43,6 +43,7 @@ No dragging. No manual layout. No learning curve.
 - Graph simplification   
 - Export as PNG  
 - Works with any note format (bullets, paragraphs, markdown)
+- Upload PDF, DOCX, or PPTX files directly
 
 ### Input → Output
 
@@ -68,7 +69,8 @@ No signup. Just paste and generate.
 
 1. Go to [notes2flow.netlify.app](https://notes2flow.netlify.app)
 2. Paste your notes into the editor
-3. Click **"Format & Generate"** — AI parses messy text and structures it into organized HTML
+3. Click **"Format & Generate"** — AI parses messy text
+   - *Or* upload a PDF, Word, or PowerPoint file directly using the upload button
 4. Click **"Generate Flow"** — Converts structured HTML into visual flowchart
 5. (Optional) Click **"Simplify Graph"** — Removes redundant nodes, cleans up hierarchy
 6. Download as PNG or edit nodes directly in-browser
@@ -93,11 +95,17 @@ No signup. Just paste and generate.
 - Improves visual clarity and readability
 - Click multiple times to iterate and refine
 
+**Upload File**
+- Accepts PDF, DOCX, and PPTX files (max 10MB, ~5 pages)
+- Extracts text in-memory, no file stored on server
+- Automatically formats and generates flowchart
+
 ## Built With
 
 - **Backend:** Python + FastAPI
 - **Visualization:** Cytoscape.js
 - **AI Parsing:** Groq API 
+- **Document Parsing:** MarkItDown (Microsoft)
 
 ## Local Development (Ollama Version)
 
