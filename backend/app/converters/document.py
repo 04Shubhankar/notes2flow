@@ -22,4 +22,13 @@ async def extract_text_from_upload(file: UploadFile) -> str:
     buffer = BytesIO(raw_bytes)
     md = MarkItDown()   
     result = md.convert_stream(buffer)
-    return result.text_content
+    text = result.text_content
+
+    if not text or not text.strip():
+        raise ValueError("No text could be extracted from the document")
+
+    # Trim to safe limit for Groq
+    if len(text) > 3000:
+        text = text[:3000]
+
+    return text
