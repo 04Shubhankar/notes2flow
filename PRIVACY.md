@@ -7,6 +7,11 @@ Notes2Flow does not collect any personal information. No emails, no accounts.
 - Your notes are sent to **Groq API** for AI processing
 - For details on how Groq handles your data, see their [privacy policy](https://groq.com/privacy)
 
+## What Happens to Uploaded Files
+- Uploaded files (PDF, DOCX, PPTX) are processed **in-memory only**
+- No file is stored on the server at any point
+- Text extracted from the file is sent to **Groq API** for AI processing
+
 ## Data Security
 By using notes2flow, acknowledge:
 - Your notes are transmitted over HTTPS (encrypted in transit)
@@ -33,4 +38,4 @@ Since notes are sent to external APIs, treat them like you're sharing with a thi
 Open an issue on [GitHub](https://github.com/04Shubhankar/notes2flow)
 
 ---
-Last updated: August 19, 2026
+Last updated: October 27, 2026
