@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const formatGenerateBtn = document.getElementById("format-generate-flow");
   const uploadBtn = document.getElementById("upload-file-btn");
   const uploadInput = document.getElementById("file-upload");
+  const uploadFileLabel = document.getElementById("upload-file-label");
+  const uploadedFileName = document.getElementById("uploaded-file-name");
   const simplifyGraphBtn = document.getElementById("simplifyGraphBtn");
 
   const editorPlaceholderText = "Start typing or paste your notes here...";
@@ -267,6 +269,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!hasAllowedExtension && !hasAllowedMimeType) {
       alert("Please upload a PDF, Word, or PowerPoint file.");
+      uploadedFileName.textContent = "";
+      uploadedFileName.hidden = true;
+      uploadFileLabel.hidden = false;
+      uploadBtn.title = "Upload a PDF, Word, or PowerPoint file";
       uploadInput.value = "";
       return;
     }
@@ -299,10 +305,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  uploadBtn.addEventListener("click", () => uploadInput.click());
+  uploadBtn.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      uploadInput.click();
+    }
+  });
   uploadInput.addEventListener("change", (event) => {
     const file = event.target.files?.[0];
     if (file) {
+      uploadedFileName.textContent = file.name;
+      uploadedFileName.title = file.name;
+      uploadedFileName.hidden = false;
+      uploadFileLabel.hidden = true;
+      uploadBtn.title = file.name;
       uploadAndFormatDocument(file);
     }
   });
